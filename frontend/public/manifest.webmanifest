@@ -1,0 +1,11 @@
+{
+  "name": "FitSmart",
+  "short_name": "FitSmart",
+  "description": "Seguimiento inteligente de entrenamientos",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "lang": "es",
+  "icons": [{ "src": "/icono.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

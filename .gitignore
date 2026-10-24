@@ -1,0 +1,24 @@
+# Dependencias
+node_modules/
+
+# Entornos virtuales y cache de Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Variables de entorno y credenciales sensibles
+.env
+.env.*
+!.env.example
+
+# Compilacion y builds
+dist/
+build/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+Desktop.ini

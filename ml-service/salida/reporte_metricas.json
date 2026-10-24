@@ -1,0 +1,11 @@
+{
+  "usuarios": 3,
+  "ejercicios": 120,
+  "series_validas": 16233,
+  "pares_entrenamiento": 3213,
+  "pares_validacion": 868,
+  "mae_repetir_peso_kg": 11.3,
+  "mae_regla_doble_progresion_kg": 11.316,
+  "mae_modelo_kg": 11.658,
+  "version_modelo": "hgb-1.0"
+}

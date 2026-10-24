@@ -1,0 +1,65 @@
+* { box-sizing: border-box; }
+:root { --negro: #111; --gris: #e6e6e6; --borde: #bdbdbd; --texto2: #555; }
+body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--negro); background: #f4f4f4; }
+.app, .pantalla-auth { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #fff; }
+.barra { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: var(--gris); border-bottom: 1px solid var(--borde); z-index: 2; }
+.marca { font-weight: 700; font-size: 18px; }
+.nivel { font-size: 12px; text-transform: capitalize; border: 1px solid var(--negro); border-radius: 12px; padding: 2px 10px; }
+.contenido { padding: 16px 16px 90px; }
+h1 { margin: 8px 0 20px; } h2 { margin: 4px 0 14px; font-size: 20px; } h3 { margin: 18px 0 4px; }
+.nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; display: grid; grid-template-columns: repeat(5, 1fr); background: var(--gris); border-top: 1px solid var(--borde); }
+.nav a { text-align: center; padding: 14px 0; color: var(--negro); text-decoration: none; font-size: 13px; }
+.nav a.active { font-weight: 700; text-decoration: underline; }
+.pantalla-auth { padding: 40px 24px; text-align: center; }
+.logo { width: 72px; }
+.form { display: flex; flex-direction: column; gap: 14px; text-align: left; margin-bottom: 16px; }
+label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--texto2); }
+.etq { font-size: 13px; color: var(--texto2); }
+input, select { font: inherit; padding: 11px 12px; border: 1px solid var(--borde); border-radius: 8px; background: #fff; color: var(--negro); width: 100%; }
+select { margin-bottom: 10px; }
+label.check { flex-direction: row; align-items: flex-start; gap: 10px; } label.check input { width: auto; margin-top: 2px; }
+.btn { font: inherit; font-weight: 600; width: 100%; padding: 13px; border: 0; border-radius: 8px; background: var(--negro); color: #fff; cursor: pointer; margin-top: 6px; }
+.btn:disabled { opacity: .4; } .btn.sec { background: #fff; color: var(--negro); border: 1px solid var(--negro); }
+.enlace { background: none; border: 0; padding: 4px 0; color: var(--negro); text-decoration: underline; cursor: pointer; font: inherit; font-size: 14px; display: inline-block; }
+.error { color: #b00020; margin: 0; font-size: 14px; } .ok { margin: 0; font-size: 14px; font-weight: 600; }
+.aviso { background: var(--gris); padding: 10px 12px; border-radius: 8px; font-size: 14px; }
+.fila2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dias { display: flex; gap: 6px; margin-top: 6px; }
+.dia { flex: 1; padding: 10px 0; border: 1px solid var(--borde); border-radius: 8px; background: #fff; font: inherit; cursor: pointer; }
+.dia.activo { background: var(--negro); color: #fff; border-color: var(--negro); }
+.caja-nivel { background: var(--gris); padding: 12px; border-radius: 8px; text-align: center; } .caja-nivel b { text-transform: capitalize; }
+.buscar { margin-bottom: 10px; }
+.chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 4px; }
+.chip { flex: none; padding: 8px 14px; border: 1px solid var(--borde); border-radius: 18px; background: #fff; font: inherit; font-size: 14px; cursor: pointer; }
+.chip.activo { background: var(--negro); color: #fff; border-color: var(--negro); }
+.lista { list-style: none; padding: 0; margin: 8px 0 0; display: flex; flex-direction: column; gap: 10px; }
+.tarjeta { border: 1px solid var(--borde); border-radius: 10px; padding: 12px; }
+.tarjeta-cab { display: flex; gap: 12px; } .tarjeta-cab small { display: block; color: var(--texto2); margin: 2px 0; }
+.miniatura { flex: none; width: 56px; height: 56px; border-radius: 8px; background: var(--gris); display: grid; place-items: center; font-weight: 700; color: var(--texto2); }
+.tecnica { margin-top: 10px; font-size: 14px; line-height: 1.45; } .tecnica a { color: var(--negro); }
+details.tecnica { background: var(--gris); padding: 10px 12px; border-radius: 8px; } summary { cursor: pointer; font-weight: 600; }
+.vacio { color: var(--texto2); text-align: center; padding: 20px; }
+.sub { color: var(--texto2); font-size: 13px; margin: 0 0 10px; }
+table.series { width: 100%; border-collapse: collapse; margin: 10px 0; }
+.series th { font-size: 12px; text-align: left; color: var(--texto2); padding: 4px; }
+.series td { padding: 4px; border-top: 1px solid var(--gris); } .series input { padding: 9px 6px; text-align: center; }
+.series tr.nueva input { background: #f7f7f7; }
+.x { border: 0; background: none; cursor: pointer; font-size: 14px; color: var(--texto2); }
+.ayuda { font-size: 12px; color: var(--texto2); margin: 4px 0; }
+.temporizador { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 12px 0; padding: 14px; border-radius: 8px; background: var(--gris); font-size: 18px; }
+.temporizador b { font-size: 26px; font-variant-numeric: tabular-nums; }
+.descanso { margin-top: 12px; } .descanso select { margin: 0; }
+.resumen { margin-top: 20px; border-top: 1px solid var(--borde); } .resumen p { margin: 4px 0; font-size: 14px; }
+.hist-ej { display: flex; flex-direction: column; margin-top: 8px; } .hist-ej small { color: var(--texto2); }
+.cargando { display: grid; place-items: center; min-height: 100vh; }
+.alerta { border: 2px solid var(--negro); border-radius: 10px; padding: 12px; margin-bottom: 14px; background: var(--gris); }
+.alerta p { margin: 6px 0; font-size: 14px; }
+.fila-rutina { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.fila-rutina small { display: block; color: var(--texto2); margin-top: 2px; }
+.btn.mini { width: auto; padding: 8px 14px; margin: 0; font-size: 14px; text-decoration: none; text-align: center; }
+.sugerencia { border: 2px solid var(--negro); border-radius: 10px; padding: 12px; margin: 10px 0; }
+.sugerencia .cifra { font-size: 20px; font-weight: 700; margin: 4px 0; }
+.sugerencia small { display: block; color: var(--texto2); }
+.botones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.botones .btn { margin: 0; }
+.dias .dia { min-width: 0; font-size: 14px; }
