@@ -16,12 +16,14 @@ export default function Historial() {
   return (
     <section>
       <h2>Historial</h2>
-      <select value={filtro.ejercicio} onChange={(e) => setFiltro({ ...filtro, ejercicio: e.target.value })}>
-        <option value="">Todos los ejercicios</option>
-        {ejercicios.map((e) => <option key={e.id_ejercicio} value={e.id_ejercicio}>{e.nombre}</option>)}</select>
-      <div className="fila2">
-        <label>Desde<input type="date" value={filtro.desde} onChange={(e) => setFiltro({ ...filtro, desde: e.target.value })} /></label>
-        <label>Hasta<input type="date" value={filtro.hasta} onChange={(e) => setFiltro({ ...filtro, hasta: e.target.value })} /></label>
+      <div className="filtros-hist">
+        <label>Ejercicio<select value={filtro.ejercicio} onChange={(e) => setFiltro({ ...filtro, ejercicio: e.target.value })}>
+          <option value="">Todos los ejercicios</option>
+          {ejercicios.map((e) => <option key={e.id_ejercicio} value={e.id_ejercicio}>{e.nombre}</option>)}</select></label>
+        <div className="fila2">
+          <label>Desde<input type="date" value={filtro.desde} onChange={(e) => setFiltro({ ...filtro, desde: e.target.value })} /></label>
+          <label>Hasta<input type="date" value={filtro.hasta} onChange={(e) => setFiltro({ ...filtro, hasta: e.target.value })} /></label>
+        </div>
       </div>
       <ul className="lista">
         {sesiones.map((s) => (

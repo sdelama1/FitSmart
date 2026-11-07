@@ -63,3 +63,72 @@ table.series { width: 100%; border-collapse: collapse; margin: 10px 0; }
 .botones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 .botones .btn { margin: 0; }
 .dias .dia { min-width: 0; font-size: 14px; }
+
+/* ---------- Diseño adaptable: tableta y computadora ---------- */
+.nav-marca { display: none; }
+.filtros .buscar { margin-bottom: 10px; }
+.filtros-hist label { margin-bottom: 10px; }
+.filtros-hist select { margin: 0; }
+
+/* Tableta (600 px a 899 px): más ancho y tarjetas en dos columnas */
+@media (min-width: 600px) and (max-width: 899px) {
+  .app, .nav { max-width: 760px; }
+  .contenido { padding: 24px 28px 96px; }
+  .lista { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+}
+
+/* Computadora (900 px o más): menú lateral y contenido a todo el ancho */
+@media (min-width: 900px) {
+  .app {
+    max-width: none; display: grid; grid-template-columns: 230px minmax(0, 1fr);
+    grid-template-rows: auto 1fr; grid-template-areas: "nav barra" "nav main";
+  }
+  .barra { grid-area: barra; justify-content: flex-end; padding: 14px 40px; }
+  .barra .marca { display: none; }
+  .contenido { grid-area: main; width: 100%; max-width: 1200px; margin: 0 auto; padding: 32px 40px 48px; }
+  h2 { font-size: 26px; margin-bottom: 20px; }
+
+  .nav {
+    grid-area: nav; position: sticky; top: 0; left: auto; transform: none; height: 100vh; width: auto; max-width: none;
+    display: flex; flex-direction: column; gap: 4px; padding: 22px 14px;
+    border-top: 0; border-right: 1px solid var(--borde);
+  }
+  .nav-marca { display: block; font-weight: 700; font-size: 22px; padding: 0 14px 22px; }
+  .nav a { text-align: left; padding: 11px 14px; border-radius: 8px; font-size: 15px; }
+  .nav a:hover { background: #d9d9d9; }
+  .nav a.active { background: var(--negro); color: #fff; text-decoration: none; }
+
+  /* Listas de tarjetas en cuadrícula (catálogo, rutina e historial) */
+  .lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; align-items: start; }
+  .tarjeta { padding: 16px; }
+
+  /* Catálogo: buscador y equipo en una fila, grupos debajo */
+  .filtros { display: grid; grid-template-columns: minmax(0, 1fr) 260px; grid-template-areas: "buscar equipo" "chips chips"; gap: 12px; margin-bottom: 8px; }
+  .filtros .buscar { grid-area: buscar; margin: 0; }
+  .filtros .equipo { grid-area: equipo; margin: 0; }
+  .filtros .chips { grid-area: chips; flex-wrap: wrap; overflow: visible; padding: 0; margin: 0; }
+
+  /* Historial: filtros en una sola fila */
+  .filtros-hist { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; align-items: end; margin-bottom: 8px; }
+  .filtros-hist label { margin: 0; }
+
+  /* Inicio: botones de días con ancho natural */
+  .dias-rutina { max-width: 560px; }
+  .alerta { max-width: 760px; }
+
+  /* Perfil: formulario de ancho cómodo */
+  .angosta { max-width: 640px; }
+  .angosta .btn { width: auto; min-width: 220px; padding: 13px 28px; align-self: flex-start; }
+  .angosta .dias { max-width: 420px; }
+
+  /* Registrar: series a la izquierda, sugerencia y técnica a la derecha */
+  .elegir-ejercicio { max-width: 520px; }
+  .registro-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr); grid-template-areas: "principal lateral"; gap: 32px; align-items: start; }
+  .registro-principal { grid-area: principal; }
+  .registro-lateral { grid-area: lateral; position: sticky; top: 76px; }
+  .registro-lateral .sugerencia { margin-top: 0; }
+  .resumen { max-width: 760px; }
+
+  /* Inicio de sesión y registro: tarjeta centrada */
+  .pantalla-auth { min-height: auto; max-width: 440px; margin: 8vh auto; padding: 44px 40px; border: 1px solid var(--borde); border-radius: 14px; }
+}

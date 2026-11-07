@@ -67,9 +67,9 @@ export default function Registrar({ perfil }) {
   const num = (k) => (e) => setF({ ...f, [k]: e.target.value === "" ? "" : Number(e.target.value) });
 
   return (
-    <section>
+    <section className="registrar">
       <h2>Registrar entrenamiento</h2>
-      <select value={idEj} onChange={(e) => setIdEj(e.target.value)}>
+      <select className="elegir-ejercicio" value={idEj} onChange={(e) => setIdEj(e.target.value)}>
         <option value="">Elige un ejercicio</option>
         {ejercicios.map((e) => <option key={e.id_ejercicio} value={e.id_ejercicio}>{e.nombre} · {e.grupo_muscular}</option>)}
       </select>
@@ -79,6 +79,8 @@ export default function Registrar({ perfil }) {
         <p className="sub">{anterior?.series?.length
           ? `Anterior (${anterior.fecha}): ${anterior.series.map((s) => `${s.peso_kg} kg × ${s.repeticiones}`).join(", ")}`
           : "Sin registros anteriores de este ejercicio"}</p>
+        <div className="registro-grid">
+        <aside className="registro-lateral">
         {sug && <div className="sugerencia">
           <b>Sugerencia para hoy</b>
           <p className="cifra">{sug.peso_sugerido_kg} kg × {sug.rep_min} a {sug.rep_max}</p>
@@ -91,7 +93,9 @@ export default function Registrar({ perfil }) {
             : <small><b>Sugerencia {sug.respondida}.</b></small>}
         </div>}
         {nivel === "principiante" && <details className="tecnica"><summary>Recordar la técnica</summary><p>{ej.descripcion_tecnica}</p></details>}
+        </aside>
 
+        <div className="registro-principal">
         <table className="series">
           <thead><tr><th>Serie</th><th>Peso (kg)</th><th>Reps</th><th>RPE</th><th></th></tr></thead>
           <tbody>
@@ -113,6 +117,8 @@ export default function Registrar({ perfil }) {
         <label className="descanso">Descanso entre series
           <select value={descanso} onChange={(e) => cambiarDescanso(Number(e.target.value))}>
             {[45, 60, 90, 120, 180, 240].map((s) => <option key={s} value={s}>{s >= 60 ? `${s / 60} min` : `${s} s`}</option>)}</select></label>
+        </div>
+        </div>
       </>}
 
       {hoy.length > 0 && <div className="resumen"><h3>Hoy</h3>

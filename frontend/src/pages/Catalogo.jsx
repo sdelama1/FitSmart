@@ -20,13 +20,15 @@ export default function Catalogo({ perfil }) {
     <section>
       <h2>Catálogo de ejercicios</h2>
       {principiante && <p className="aviso">Revisa la técnica de cada ejercicio antes de registrarlo.</p>}
-      <input className="buscar" placeholder="Buscar ejercicio" value={q} onChange={(e) => setQ(e.target.value)} />
-      <div className="chips">
-        <button className={!grupo ? "chip activo" : "chip"} onClick={() => setGrupo("")}>Todos</button>
-        {filtros.grupos.map((g) => <button key={g} className={grupo === g ? "chip activo" : "chip"} onClick={() => setGrupo(g)}>{g}</button>)}
+      <div className="filtros">
+        <input className="buscar" placeholder="Buscar ejercicio" value={q} onChange={(e) => setQ(e.target.value)} />
+        <div className="chips">
+          <button className={!grupo ? "chip activo" : "chip"} onClick={() => setGrupo("")}>Todos</button>
+          {filtros.grupos.map((g) => <button key={g} className={grupo === g ? "chip activo" : "chip"} onClick={() => setGrupo(g)}>{g}</button>)}
+        </div>
+        <select className="equipo" value={equipo} onChange={(e) => setEquipo(e.target.value)}>
+          <option value="">Todo el equipo</option>{filtros.equipos.map((x) => <option key={x}>{x}</option>)}</select>
       </div>
-      <select value={equipo} onChange={(e) => setEquipo(e.target.value)}>
-        <option value="">Todo el equipo</option>{filtros.equipos.map((x) => <option key={x}>{x}</option>)}</select>
       <ul className="lista">
         {lista.map((e) => (
           <li key={e.id_ejercicio} className="tarjeta">

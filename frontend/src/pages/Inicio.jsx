@@ -40,7 +40,7 @@ export default function Inicio({ perfil }) {
       {rutina && <>
         <p className="sub">{rutina.nombre} · {OBJ[rutina.objetivo]} · nivel {rutina.nivel}</p>
         {desactualizada && <div className="aviso">Tu perfil cambió. <button className="enlace" onClick={generar}>Regenerar rutina</button></div>}
-        <div className="dias">{rutina.dias.map((d) => (
+        <div className="dias dias-rutina">{rutina.dias.map((d) => (
           <button key={d.dia} className={dia === d.dia ? "dia activo" : "dia"} onClick={() => setDia(d.dia)}>Día {d.dia}</button>))}</div>
         <ul className="lista">
           {diaActual?.ejercicios.map((e) => (
