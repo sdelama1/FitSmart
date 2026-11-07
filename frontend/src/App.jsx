@@ -26,6 +26,7 @@ function Protegida({ usuario, perfil, setPerfil, salir }) {
         </Routes>
       </main>
       <nav className="nav">
+        <span className="nav-marca">FitSmart</span>
         <NavLink to="/" end>Inicio</NavLink>
         <NavLink to="/catalogo">Catálogo</NavLink>
         <NavLink to="/registrar">Registrar</NavLink>

@@ -17,7 +17,7 @@ export default function Perfil({ perfil, setPerfil, salir }) {
     catch (err) { setError(err.message); }
   };
   return (
-    <section>
+    <section className="angosta">
       <h2>Mi perfil</h2>
       {!perfil?.nivel && <p className="aviso">Completa tu perfil para empezar a registrar entrenamientos.</p>}
       <form onSubmit={guardar} className="form">
