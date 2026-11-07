@@ -49,7 +49,8 @@ export default function App() {
     api("/perfil").then(setPerfil).catch(() => setPerfil(null)).finally(() => setCargando(false));
   }, [usuario]);
 
-  const entrar = (data) => { sesionLocal.guardar(data); setUsuario(data.usuario); navigate("/"); };
+  // Se marca la carga antes de navegar para no redirigir a Perfil mientras llega el perfil del usuario
+  const entrar = (data) => { setCargando(true); sesionLocal.guardar(data); setUsuario(data.usuario); navigate("/"); };
   const salir = () => { sesionLocal.borrar(); setUsuario(null); setPerfil(null); navigate("/login"); };
 
   if (cargando) return <div className="cargando">Cargando…</div>;
