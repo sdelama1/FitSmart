@@ -31,7 +31,7 @@ export default function Historial() {
             <b>{fecha(s.fecha)}</b>
             {s.ejercicios.map((e) => (
               <div key={e.id_ejercicio} className="hist-ej"><span>{e.nombre}</span>
-                <small>{e.series.map((x) => `${x.peso_kg} kg × ${x.repeticiones}${x.rpe ? ` (RPE ${x.rpe})` : ""}`).join(" · ")}</small></div>))}
+                <small>{e.series.map((x) => `${x.calentamiento ? "Calentamiento " : ""}${x.peso_kg} kg × ${x.repeticiones}${x.rpe ? ` (RPE ${x.rpe})` : ""}`).join(" · ")}</small></div>))}
           </li>))}
         {!sesiones.length && <li className="vacio">Todavía no hay sesiones registradas.</li>}
       </ul>

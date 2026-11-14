@@ -37,18 +37,32 @@ function resumirSesiones(filas) {
   return out;
 }
 
+// HU-22: subida máxima por sesión. Es la menor entre el límite del tren, el incremento propio del ejercicio
+// y el 10 % de la carga actual (redondeado hacia abajo a 0,5 kg, con un mínimo de 0,5 kg)
+const MAX_SUBIDA_PORCENTAJE = 0.10;
+function topeSubida(actual, inferior, incremento) {
+  const tren = inferior ? LIMITE_INFERIOR_KG : LIMITE_SUPERIOR_KG;
+  const porcentaje = Math.floor(actual * MAX_SUBIDA_PORCENTAJE * 2) / 2;
+  return Math.max(0.5, Math.min(tren, incremento ?? tren, porcentaje));
+}
+
 // Respaldo del modelo: doble progresión con los mismos límites de seguridad
-function reglaDobleProgresion(ultima, repMax, inferior) {
-  const tope = inferior ? LIMITE_INFERIOR_KG : LIMITE_SUPERIOR_KG;
+function reglaDobleProgresion(ultima, repMax, inferior, incremento) {
+  const tope = topeSubida(ultima.peso_kg, inferior, incremento);
   const sube = ultima.repeticiones >= repMax;
   return { peso_sugerido_kg: ultima.peso_kg + (sube ? tope : 0), delta_kg: sube ? tope : 0 };
 }
 
-// Límites de seguridad aplicados también a la respuesta del modelo
-function aplicarLimites(actual, sugerido, inferior) {
-  const tope = inferior ? LIMITE_INFERIOR_KG : LIMITE_SUPERIOR_KG;
-  const v = Math.min(actual + tope, Math.max(actual * 0.9, sugerido));
-  return Math.round(v * 2) / 2;
+// Límites de seguridad aplicados también a la respuesta del modelo. La subida se redondea al tope permitido
+// y la bajada a múltiplos del incremento del ejercicio (como máximo un 10 %), para sugerir cargas que existen en la sala
+function aplicarLimites(actual, sugerido, inferior, incremento) {
+  const tope = topeSubida(actual, inferior, incremento);
+  const paso = incremento ?? (inferior ? LIMITE_INFERIOR_KG : LIMITE_SUPERIOR_KG);
+  const d = sugerido - actual;
+  let delta = 0;
+  if (d > 0) delta = Math.min(tope, Math.round(d / tope) * tope);
+  else if (d < 0) delta = -Math.min(Math.floor((actual * 0.1) / paso) * paso, Math.floor(-d / paso) * paso);
+  return Math.round((actual + delta) * 2) / 2;
 }
 
 // HU-11: estancamiento si ninguna de las 3 últimas sesiones supera el volumen de la sesión previa a ellas
@@ -58,4 +72,4 @@ function hayEstancamiento(volumenes) {
   return volumenes.slice(-3).every((v) => v <= ref);
 }
 
-module.exports = { prescripcion, resumirSesiones, reglaDobleProgresion, aplicarLimites, hayEstancamiento, LIMITE_SUPERIOR_KG, LIMITE_INFERIOR_KG };
+module.exports = { topeSubida, prescripcion, resumirSesiones, reglaDobleProgresion, aplicarLimites, hayEstancamiento, LIMITE_SUPERIOR_KG, LIMITE_INFERIOR_KG };

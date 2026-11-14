@@ -1,7 +1,7 @@
 # FitSmart · Sprints 1 y 2 (entregables 1.4.1, 1.4.2 y 1.4.3)
 
 Aplicación web del módulo inteligente de seguimiento de entrenamientos FitSmart.
-Cubre las historias HU-01 a HU-12 y, del Sprint 3, la HU-19.
+Cubre las historias HU-01 a HU-12 y, del Sprint 3, las HU-19 a HU-23.
 
 ## Sprint 1
 
@@ -30,6 +30,10 @@ Cubre las historias HU-01 a HU-12 y, del Sprint 3, la HU-19.
 | Historia | Qué incluye | Dónde está |
 |---|---|---|
 | HU-19 | Recomendación personalizada de ejercicios en el catálogo según el historial: siguiente nivel al dominar un ejercicio (3 sesiones con carga en aumento), variante ante un estancamiento, equilibrio de grupos musculares sin entrenar en 7 días y ejercicios nuevos adecuados al nivel. Cada ejercicio tiene dificultad (básico, intermedio, avanzado) y el principiante no recibe ejercicios avanzados. Se registra si el usuario acepta o descarta cada recomendación | `backend/src/recomendador.js`, `backend/src/routes/recomendaciones.js`, `backend/db/03_recomendaciones.sql`, `Catalogo.jsx` |
+| HU-20 | Botón "¿Equipo ocupado?" en Registrar: hasta 3 ejercicios del mismo músculo con otro equipo, aptos para el nivel, primero los que el usuario ya hizo | `GET /api/ejercicios/:id/alternativas`, `Registrar.jsx` |
+| HU-21 | El principiante indica cuántas repeticiones más podía hacer (0, 1 o 2, 3 o 4, 5 o más) en lugar del RPE; se guarda como RPE equivalente (10, 9, 7 y 5) | `Registrar.jsx` |
+| HU-22 | Incremento propio de cada ejercicio (1 kg en laterales, bíceps y tríceps; 2 kg en mancuernas; 2,5 kg en tren superior; 5 kg en tren inferior con barra o máquina). La subida nunca pasa del 10 % de la carga y las sugerencias se redondean a saltos de carga reales | `backend/src/progresion.js`, `backend/db/04_ajustes_coach.sql` |
+| HU-23 | Interruptor "Serie de calentamiento": la serie se guarda y se ve en el historial, pero no cuenta para la sugerencia, la precarga, el volumen, las alertas ni las recomendaciones | `backend/src/routes/sesiones.js`, `Registrar.jsx` |
 
 Tecnologías: React + Vite (PWA), Node.js + Express, PostgreSQL y Python (FastAPI + scikit-learn) para el modelo.
 
@@ -128,6 +132,7 @@ python -m pytest tests
 | POST | `/api/rutinas/generar` | Generar rutina guiada desde el perfil |
 | GET | `/api/rutinas/actual` | Rutina vigente |
 | GET | `/api/recomendaciones` | Recomendaciones personalizadas de ejercicios (máximo 3) |
+| GET | `/api/ejercicios/:id/alternativas` | Ejercicios alternativos si el equipo está ocupado |
 | PATCH | `/api/recomendaciones/:id` | Registrar si la recomendación se aceptó o se descartó |
 
 Todas las rutas, salvo registro y login, piden el encabezado `Authorization: Bearer <token>`.

@@ -14,7 +14,7 @@ router.get("/", async (req, res, next) => {
     const historial = (await db.query(
       `SELECT se.id_ejercicio, to_char(s.fecha, 'YYYY-MM-DD') AS fecha, MAX(se.peso_kg)::float AS peso_max,
               SUM(se.peso_kg * se.repeticiones)::float AS volumen
-       FROM sesion s JOIN serie se ON se.id_sesion = s.id_sesion WHERE s.id_usuario = $1
+       FROM sesion s JOIN serie se ON se.id_sesion = s.id_sesion WHERE s.id_usuario = $1 AND NOT se.calentamiento
        GROUP BY se.id_ejercicio, s.id_sesion, s.fecha ORDER BY s.fecha, s.id_sesion`, [id])).rows;
     const excluir = new Set((await db.query(
       `SELECT DISTINCT id_ejercicio FROM recomendacion_ejercicio

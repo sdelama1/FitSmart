@@ -61,3 +61,16 @@ test("HU-19: no repite un ejercicio descartado", () => {
   const r = recomendar({ nivel: "principiante" }, CAT, [], { hoy: HOY, excluir: new Set([4]) });
   assert.ok(!r.some((x) => x.ejercicio.id_ejercicio === 4));
 });
+
+test("HU-20: con la prensa ocupada propone ejercicios de pierna con otro equipo, primero los conocidos", () => {
+  const cat = [
+    { id_ejercicio: 1, nombre: "Prensa de piernas", grupo_muscular: "Piernas", tren: "inferior", equipo: "Máquina", dificultad: 1 },
+    { id_ejercicio: 2, nombre: "Extensión de cuádriceps", grupo_muscular: "Piernas", tren: "inferior", equipo: "Máquina", dificultad: 1 },
+    { id_ejercicio: 3, nombre: "Sentadilla goblet", grupo_muscular: "Piernas", tren: "inferior", equipo: "Mancuernas", dificultad: 1 },
+    { id_ejercicio: 4, nombre: "Sentadilla con barra", grupo_muscular: "Piernas", tren: "inferior", equipo: "Barra", dificultad: 2 },
+    { id_ejercicio: 5, nombre: "Peso muerto convencional", grupo_muscular: "Piernas", tren: "inferior", equipo: "Barra", dificultad: 3 },
+  ];
+  const { alternativas } = require("../src/recomendador");
+  assert.deepStrictEqual(alternativas(cat[0], cat, "principiante").map((e) => e.id_ejercicio), [3, 4]);
+  assert.deepStrictEqual(alternativas(cat[0], cat, "intermedio", new Set([4])).map((e) => e.id_ejercicio), [4, 3, 5]);
+});

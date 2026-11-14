@@ -1,6 +1,7 @@
 // HU-04 y HU-06: catálogo con filtros y precarga de la sesión anterior
 const router = require("express").Router();
 const db = require("../db");
+const { alternativas } = require("../recomendador");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -23,6 +24,20 @@ router.get("/filtros", async (_req, res, next) => {
   } catch (e) { next(e); }
 });
 
+// HU-20: ejercicios alternativos cuando el equipo está ocupado
+router.get("/:id/alternativas", async (req, res, next) => {
+  try {
+    const catalogo = (await db.query("SELECT * FROM ejercicio ORDER BY id_ejercicio")).rows;
+    const ej = catalogo.find((e) => e.id_ejercicio === Number(req.params.id));
+    if (!ej) return res.status(404).json({ error: "Ejercicio no encontrado" });
+    const perfil = (await db.query("SELECT nivel FROM perfil_entrenamiento WHERE id_usuario = $1", [req.usuario.id])).rows[0];
+    const conocidos = new Set((await db.query(
+      "SELECT DISTINCT se.id_ejercicio FROM sesion s JOIN serie se ON se.id_sesion = s.id_sesion WHERE s.id_usuario = $1",
+      [req.usuario.id])).rows.map((r) => r.id_ejercicio));
+    res.json(alternativas(ej, catalogo, perfil?.nivel, conocidos).map((e) => ({ ...e, conocido: conocidos.has(e.id_ejercicio) })));
+  } catch (e) { next(e); }
+});
+
 router.get("/:id", async (req, res, next) => {
   try {
     const { rows } = await db.query("SELECT * FROM ejercicio WHERE id_ejercicio = $1", [req.params.id]);
@@ -37,12 +52,12 @@ router.get("/:id/ultima-sesion", async (req, res, next) => {
     const excluir = req.query.excluir_sesion ? Number(req.query.excluir_sesion) : 0;
     const ult = await db.query(
       `SELECT s.id_sesion, to_char(s.fecha, 'YYYY-MM-DD') AS fecha FROM sesion s JOIN serie se ON se.id_sesion = s.id_sesion
-       WHERE s.id_usuario = $1 AND se.id_ejercicio = $2 AND s.id_sesion <> $3
+       WHERE s.id_usuario = $1 AND se.id_ejercicio = $2 AND s.id_sesion <> $3 AND NOT se.calentamiento
        ORDER BY s.fecha DESC, s.id_sesion DESC LIMIT 1`, [req.usuario.id, req.params.id, excluir]);
     if (!ult.rows[0]) return res.json(null);
     const series = await db.query(
       `SELECT numero_serie, peso_kg::float AS peso_kg, repeticiones, rpe FROM serie
-       WHERE id_sesion = $1 AND id_ejercicio = $2 ORDER BY numero_serie`, [ult.rows[0].id_sesion, req.params.id]);
+       WHERE id_sesion = $1 AND id_ejercicio = $2 AND NOT calentamiento ORDER BY numero_serie`, [ult.rows[0].id_sesion, req.params.id]);
     res.json({ fecha: ult.rows[0].fecha, series: series.rows });
   } catch (e) { next(e); }
 });

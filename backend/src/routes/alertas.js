@@ -6,7 +6,7 @@ const { hayEstancamiento } = require("../progresion");
 async function detectar(idUsuario) {
   const { rows } = await db.query(
     `SELECT se.id_ejercicio, s.id_sesion, MAX(s.fecha) AS fecha, SUM(se.peso_kg * se.repeticiones)::float AS volumen
-     FROM sesion s JOIN serie se ON se.id_sesion = s.id_sesion WHERE s.id_usuario = $1
+     FROM sesion s JOIN serie se ON se.id_sesion = s.id_sesion WHERE s.id_usuario = $1 AND NOT se.calentamiento
      GROUP BY se.id_ejercicio, s.id_sesion ORDER BY se.id_ejercicio, MAX(s.fecha), s.id_sesion`, [idUsuario]);
   const porEj = new Map();
   for (const r of rows) {

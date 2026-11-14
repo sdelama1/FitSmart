@@ -13,8 +13,10 @@ test("HU-10: la regla sube 5 kg en tren inferior", () => {
 test("HU-10: los límites recortan la sugerencia del modelo", () => {
   assert.strictEqual(aplicarLimites(40, 50, false), 42.5);
   assert.strictEqual(aplicarLimites(80, 95, true), 85);
-  assert.strictEqual(aplicarLimites(40, 41.3, false), 41.5);
-  assert.strictEqual(aplicarLimites(40, 20, false), 36);
+  assert.strictEqual(aplicarLimites(40, 41.3, false), 42.5); // HU-22: la subida se redondea a un salto de carga real
+  assert.strictEqual(aplicarLimites(40, 41, false), 40);
+  assert.strictEqual(aplicarLimites(40, 20, false), 37.5);   // bajada máxima del 10 % en saltos de 2,5 kg
+  assert.strictEqual(aplicarLimites(75, 74.5, true, 5), 75);   // una bajada menor al incremento no se sugiere
 });
 test("HU-11: tres sesiones sin superar el volumen previo generan estancamiento", () => {
   assert.strictEqual(hayEstancamiento([1000, 1200, 1150, 1200, 1100]), true);
@@ -57,4 +59,15 @@ test("HU-12: fuerza para experimentado usa 4 series de 4 a 6", () => {
   const r = generarRutina({ nivel: "experimentado", objetivo: "fuerza", dias_por_semana: 5 }, CAT);
   assert.strictEqual(r.dias.length, 5);
   assert.ok(r.dias[1].ejercicios.some((e) => /bíceps/.test(e.nombre)));
+});
+
+test("HU-22: la subida respeta el incremento del ejercicio y el 10 % de la carga", () => {
+  const { topeSubida } = require("../src/progresion");
+  assert.strictEqual(topeSubida(8, false, 1), 0.5);      // elevaciones laterales con 8 kg: 10 % = 0,8 → 0,5 kg
+  assert.strictEqual(topeSubida(20, false, 1), 1);       // con 20 kg sube el incremento propio, 1 kg
+  assert.strictEqual(topeSubida(60, false, 2.5), 2.5);   // press de banca con 60 kg
+  assert.strictEqual(topeSubida(20, false, 2.5), 2);     // press de banca con 20 kg: 10 % = 2 kg
+  assert.strictEqual(topeSubida(100, true, 5), 5);
+  assert.strictEqual(reglaDobleProgresion({ peso_kg: 8, repeticiones: 15 }, 15, false, 1).peso_sugerido_kg, 8.5);
+  assert.strictEqual(aplicarLimites(8, 12, false, 1), 8.5);
 });

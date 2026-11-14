@@ -236,3 +236,32 @@ table.series { width: 100%; border-collapse: collapse; }
 .dificultad.d2 { border-color: #c8f53c66; color: var(--acento); }
 .dificultad.d3 { border-color: #ff8a3d88; color: var(--naranja); }
 @media (min-width: 600px) { .recs { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); } }
+
+/* HU-20: alternativas cuando el equipo está ocupado */
+.cab-ejercicio { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
+.cab-ejercicio h3 { margin: 6px 0; }
+.btn-ocupado { flex: none; font: 600 13px Inter, sans-serif; padding: 8px 12px; border-radius: 10px; border: 1px solid #ff8a3d88; background: #2a1a10; color: var(--naranja); cursor: pointer; }
+.alternativas { background: var(--tarjeta); border: 1px solid #ff8a3d55; border-radius: 16px; padding: 12px; margin: 8px 0 4px; }
+.alternativas .sub { margin: 0 0 8px; }
+.alt { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; text-align: left; padding: 11px 12px; margin-top: 6px; border-radius: 12px; border: 1px solid var(--linea); background: var(--tarjeta2); color: var(--texto); font: inherit; cursor: pointer; }
+.alt:hover { border-color: var(--acento); }
+.alt b { display: block; font-size: 15px; } .alt small { color: var(--texto2); font-size: 12px; }
+.alt .flecha { color: var(--acento); font-size: 13px; font-weight: 600; flex: none; }
+
+/* HU-23: interruptor y filas de calentamiento */
+.interruptor { flex-direction: row; align-items: center; gap: 12px; margin-top: 12px; cursor: pointer; color: var(--texto); font-size: 14px; font-weight: 600; }
+.interruptor input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.interruptor .pista { flex: none; width: 42px; height: 24px; border-radius: 20px; background: var(--tarjeta2); border: 1px solid var(--linea); position: relative; transition: background .15s; }
+.interruptor .pista::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--texto2); transition: transform .15s, background .15s; }
+.interruptor input:checked + .pista { background: var(--naranja); border-color: var(--naranja); }
+.interruptor input:checked + .pista::after { transform: translateX(18px); background: var(--fondo); }
+.interruptor input:focus-visible + .pista { outline: 2px solid var(--acento); outline-offset: 2px; }
+.interruptor small { display: block; color: var(--texto2); font-weight: 400; font-size: 12px; margin-top: 1px; }
+.panel-serie.modo-cal { border-color: #ff8a3d88; }
+.panel-serie.modo-cal .cab span:first-child { color: var(--naranja); }
+.panel-serie.modo-cal .btn.guardar { background: var(--naranja); }
+.fila-cal td { color: var(--texto2); font-style: italic; }
+.fila-cal td:first-child { color: var(--naranja); font-style: normal; font-weight: 700; }
+
+/* HU-21: opciones de repeticiones en reserva */
+.rpe .opciones.reserva { grid-template-columns: repeat(4, 1fr); }

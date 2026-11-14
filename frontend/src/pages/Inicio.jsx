@@ -6,12 +6,12 @@ import { api } from "../api.js";
 // Resumen de la semana calculado con el historial del usuario (semana de lunes a domingo)
 const lunesDe = (d) => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; };
 const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-const volumen = (ss) => ss.reduce((t, s) => t + s.ejercicios.reduce((a, e) => a + e.series.reduce((b, x) => b + x.peso_kg * x.repeticiones, 0), 0), 0);
+const volumen = (ss) => ss.reduce((t, s) => t + s.ejercicios.reduce((a, e) => a + e.series.reduce((b, x) => b + (x.calentamiento ? 0 : x.peso_kg * x.repeticiones), 0), 0), 0);
 function resumirSemana(sesiones) {
   const lunes = lunesDe(new Date()), lunesAnt = new Date(lunes); lunesAnt.setDate(lunes.getDate() - 7);
   const esta = sesiones.filter((s) => s.fecha >= iso(lunes)), ant = sesiones.filter((s) => s.fecha >= iso(lunesAnt) && s.fecha < iso(lunes));
   const vEsta = volumen(esta), vAnt = volumen(ant);
-  return { sesiones: esta.length, series: esta.reduce((t, s) => t + s.ejercicios.reduce((a, e) => a + e.series.length, 0), 0),
+  return { sesiones: esta.length, series: esta.reduce((t, s) => t + s.ejercicios.reduce((a, e) => a + e.series.filter((x) => !x.calentamiento).length, 0), 0),
     volumen: vEsta, anterior: vAnt };
 }
 const miles = (n) => n.toLocaleString("es-PE", { maximumFractionDigits: 0 });

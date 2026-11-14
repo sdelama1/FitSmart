@@ -92,4 +92,17 @@ function recomendar(perfil, catalogo, historial, { hoy, excluir = new Set(), max
   return elegidas;
 }
 
-module.exports = { recomendar, domina, MAX_DIFICULTAD };
+// HU-20: alternativas cuando la máquina o el equipo están ocupados. Mismo grupo muscular y tren, otro equipo,
+// dificultad adecuada al nivel; primero las que el usuario ya conoce y las de dificultad parecida
+function alternativas(ej, catalogo, nivel, conocidos = new Set(), max = 3) {
+  const tope = MAX_DIFICULTAD[nivel] || 2;
+  return catalogo
+    .filter((x) => x.id_ejercicio !== ej.id_ejercicio && x.grupo_muscular === ej.grupo_muscular && x.tren === ej.tren
+      && x.equipo !== ej.equipo && (x.dificultad || 1) <= tope)
+    .sort((a, b) => conocidos.has(b.id_ejercicio) - conocidos.has(a.id_ejercicio)
+      || Math.abs((a.dificultad || 1) - (ej.dificultad || 1)) - Math.abs((b.dificultad || 1) - (ej.dificultad || 1))
+      || a.id_ejercicio - b.id_ejercicio)
+    .slice(0, max);
+}
+
+module.exports = { recomendar, alternativas, domina, MAX_DIFICULTAD };

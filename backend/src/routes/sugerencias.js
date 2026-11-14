@@ -36,21 +36,22 @@ router.get("/:idEjercicio", async (req, res, next) => {
     const filas = (await db.query(
       `SELECT s.id_sesion, to_char(s.fecha, 'YYYY-MM-DD') AS fecha, se.peso_kg::float AS peso_kg, se.repeticiones, se.rpe
        FROM sesion s JOIN serie se ON se.id_sesion = s.id_sesion
-       WHERE s.id_usuario = $1 AND se.id_ejercicio = $2 AND s.id_sesion <> $3
+       WHERE s.id_usuario = $1 AND se.id_ejercicio = $2 AND s.id_sesion <> $3 AND NOT se.calentamiento
        ORDER BY s.fecha, s.id_sesion, se.numero_serie`, [idU, idE, excluir])).rows;
     if (!filas.length) return res.json(null);
     const historial = resumirSesiones(filas);
     const ultima = historial.at(-1);
     const inferior = ej.tren === "inferior";
+    const incremento = Number(ej.incremento_kg) || undefined;
 
     const inicio = Date.now();
     const delModelo = await pedirAlModelo(historial, inferior);
     let peso, fuente, version;
     if (delModelo) {
-      peso = aplicarLimites(ultima.peso_kg, delModelo.peso_sugerido_kg, inferior);
+      peso = aplicarLimites(ultima.peso_kg, delModelo.peso_sugerido_kg, inferior, incremento);
       fuente = "modelo"; version = delModelo.version_modelo;
     } else {
-      peso = reglaDobleProgresion(ultima, rango.rep_max, inferior).peso_sugerido_kg;
+      peso = reglaDobleProgresion(ultima, rango.rep_max, inferior, incremento).peso_sugerido_kg;
       fuente = "regla"; version = "regla-doble-prog";
     }
     // Si ya hay una sugerencia de hoy sin responder para el mismo peso, se reutiliza
