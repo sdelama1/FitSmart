@@ -1,5 +1,5 @@
 // Service worker mínimo: guarda la interfaz para abrirla sin conexión
-const CACHE = "fitsmart-v1";
+const CACHE = "fitsmart-v2";
 self.addEventListener("install", (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then((c) => c.addAll(["/", "/index.html"]))); });
 self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 self.addEventListener("fetch", (e) => {

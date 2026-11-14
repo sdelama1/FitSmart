@@ -12,7 +12,8 @@ export default function Login({ entrar }) {
   return (
     <div className="pantalla-auth">
       <img src="/icono.svg" alt="" className="logo" />
-      <h1>FitSmart</h1>
+      <h1>FIT<span>SMART</span></h1>
+      <p className="lema">Tu entrenamiento, con la carga justa.</p>
       <form onSubmit={enviar} className="form">
         <label>Correo electrónico<input type="email" required value={f.correo} onChange={(e) => setF({ ...f, correo: e.target.value })} /></label>
         <label>Contraseña<input type="password" required value={f.contrasena} onChange={(e) => setF({ ...f, contrasena: e.target.value })} /></label>
