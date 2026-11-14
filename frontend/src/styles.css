@@ -216,3 +216,23 @@ table.series { width: 100%; border-collapse: collapse; }
 }
 .solo-pc { display: none; }
 @media (min-width: 900px) { .solo-pc { display: block; } }
+
+/* HU-19: recomendaciones personalizadas en el catálogo */
+.recomendaciones { margin-bottom: 18px; }
+.recomendaciones h3, .titulo-lista { font-family: var(--titulo); text-transform: uppercase; font-size: 22px; letter-spacing: .5px; margin: 6px 0 2px; }
+.titulo-lista { margin-top: 18px; margin-bottom: 10px; }
+.recs { display: grid; gap: 10px; }
+.rec { border-radius: 18px; padding: 14px 16px; background: linear-gradient(135deg, #253012, var(--tarjeta) 70%); border: 1px solid #c8f53c55; display: flex; flex-direction: column; }
+.rec.rec-variante { background: linear-gradient(135deg, #2e1d10, var(--tarjeta) 70%); border-color: #ff8a3d55; }
+.rec.rec-variante .tag { color: var(--naranja); }
+.rec.rec-equilibrio, .rec.rec-nuevo { background: var(--tarjeta); border-color: var(--linea); }
+.rec.rec-equilibrio .tag, .rec.rec-nuevo .tag { color: var(--texto2); }
+.rec .tag { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--acento); }
+.rec b { font-family: var(--titulo); font-size: 26px; margin-top: 4px; line-height: 1.1; }
+.rec-meta { color: var(--texto2); font-size: 12px; margin-top: 2px; }
+.rec p { color: var(--texto2); font-size: 13px; line-height: 1.45; margin: 8px 0 0; flex: 1; }
+.rec .botones { margin-top: 12px; }
+.dificultad { display: table; margin: 5px 0 2px; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px; border: 1px solid var(--linea); color: var(--texto2); }
+.dificultad.d2 { border-color: #c8f53c66; color: var(--acento); }
+.dificultad.d3 { border-color: #ff8a3d88; color: var(--naranja); }
+@media (min-width: 600px) { .recs { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); } }

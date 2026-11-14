@@ -1,5 +1,6 @@
 // HU-12: generación de la rutina guiada según nivel, objetivo y días disponibles
 const { prescripcion } = require("./progresion");
+const { MAX_DIFICULTAD } = require("./recomendador");
 
 const PLANTILLAS = {
   cuerpo_completo: ["Piernas", "Pecho", "Espalda", "Hombros", "Piernas", "Brazos", "Core"],
@@ -27,7 +28,8 @@ function generarRutina(perfil, ejercicios) {
   const usados = new Map();
   const tomar = (clave, delDia) => {
     const [grupo, filtro] = clave.split(":");
-    let pool = ejercicios.filter((e) => e.grupo_muscular === grupo && !delDia.has(e.id_ejercicio));
+    // Solo ejercicios de una dificultad adecuada al nivel (HU-19)
+    let pool = ejercicios.filter((e) => e.grupo_muscular === grupo && !delDia.has(e.id_ejercicio) && (e.dificultad || 1) <= (MAX_DIFICULTAD[nivel] || 2));
     if (filtro === "tríceps") pool = pool.filter((e) => /tríceps/i.test(e.nombre));
     if (filtro === "bíceps") pool = pool.filter((e) => /bíceps/i.test(e.nombre));
     if (!pool.length) return null;

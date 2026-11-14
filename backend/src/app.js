@@ -13,6 +13,7 @@ app.use("/api/ejercicios", requiereAuth, require("./routes/ejercicios"));
 app.use("/api/sesiones", requiereAuth, require("./routes/sesiones"));
 app.use("/api/sugerencias", requiereAuth, require("./routes/sugerencias"));
 app.use("/api/alertas", requiereAuth, require("./routes/alertas"));
+app.use("/api/recomendaciones", requiereAuth, require("./routes/recomendaciones"));
 app.use("/api/rutinas", requiereAuth, require("./routes/rutinas").router);
 
 app.use((err, _req, res, _next) => {

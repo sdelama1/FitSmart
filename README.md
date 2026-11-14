@@ -1,7 +1,7 @@
 # FitSmart · Sprints 1 y 2 (entregables 1.4.1, 1.4.2 y 1.4.3)
 
 Aplicación web del módulo inteligente de seguimiento de entrenamientos FitSmart.
-Cubre las historias HU-01 a HU-12.
+Cubre las historias HU-01 a HU-12 y, del Sprint 3, la HU-19.
 
 ## Sprint 1
 
@@ -24,6 +24,12 @@ Cubre las historias HU-01 a HU-12.
 | HU-10 | Sugerencia de peso para la sesión con botones Aceptar y Mantener peso; tope de +2,5 kg en tren superior y +5 kg en tren inferior; si el servicio del modelo no responde en 1,5 s se usa la regla de doble progresión | `ml-service/main.py`, `backend/src/routes/sugerencias.js`, `Registrar.jsx` |
 | HU-11 | Alerta cuando ninguna de las 3 últimas sesiones de un ejercicio supera el volumen de la sesión previa, con un ejercicio del mismo grupo muscular como variante | `backend/src/routes/alertas.js`, `Inicio.jsx` |
 | HU-12 | Rutina según nivel (4, 5 o 6 ejercicios por día; máquinas primero para principiantes), objetivo (series y repeticiones) y días por semana (cuerpo completo, superior/inferior o empuje/tirón/pierna) | `backend/src/rutina.js`, `backend/src/routes/rutinas.js`, `Inicio.jsx` |
+
+## Sprint 3 (avance)
+
+| Historia | Qué incluye | Dónde está |
+|---|---|---|
+| HU-19 | Recomendación personalizada de ejercicios en el catálogo según el historial: siguiente nivel al dominar un ejercicio (3 sesiones con carga en aumento), variante ante un estancamiento, equilibrio de grupos musculares sin entrenar en 7 días y ejercicios nuevos adecuados al nivel. Cada ejercicio tiene dificultad (básico, intermedio, avanzado) y el principiante no recibe ejercicios avanzados. Se registra si el usuario acepta o descarta cada recomendación | `backend/src/recomendador.js`, `backend/src/routes/recomendaciones.js`, `backend/db/03_recomendaciones.sql`, `Catalogo.jsx` |
 
 Tecnologías: React + Vite (PWA), Node.js + Express, PostgreSQL y Python (FastAPI + scikit-learn) para el modelo.
 
@@ -52,7 +58,7 @@ copy .env.example .env      # en Mac/Linux: cp .env.example .env
 Abre `.env` y pon la contraseña de tu usuario `postgres` en `DATABASE_URL` y una clave larga cualquiera en `JWT_SECRET`. Luego:
 
 ```bash
-npm run db:init    # crea las 10 tablas y carga 16 ejercicios
+npm run db:init    # crea las tablas y carga 23 ejercicios; si la base ya existe, solo aplica las actualizaciones
 npm run dev        # API en http://localhost:3000
 ```
 
@@ -121,6 +127,8 @@ python -m pytest tests
 | PATCH | `/api/alertas/:id/leida` | Marcar alerta como leída |
 | POST | `/api/rutinas/generar` | Generar rutina guiada desde el perfil |
 | GET | `/api/rutinas/actual` | Rutina vigente |
+| GET | `/api/recomendaciones` | Recomendaciones personalizadas de ejercicios (máximo 3) |
+| PATCH | `/api/recomendaciones/:id` | Registrar si la recomendación se aceptó o se descartó |
 
 Todas las rutas, salvo registro y login, piden el encabezado `Authorization: Bearer <token>`.
 

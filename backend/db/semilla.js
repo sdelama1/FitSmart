@@ -91,6 +91,21 @@ const bcrypt = require("bcryptjs");
   );
   console.log("Sesiones y alerta de estancamiento cargadas para 'Sentadilla con barra'.");
 
+  // 7. Sesiones de 'Jalón al pecho' con carga en aumento (HU-19: recomendación de progresión a Dominadas)
+  const ejJalon = (await client.query("SELECT id_ejercicio FROM ejercicio WHERE nombre LIKE 'Jal_n al pecho'")).rows[0]?.id_ejercicio;
+  if (ejJalon) {
+    for (const s of [{ diasAtras: 13, peso: 35.0 }, { diasAtras: 9, peso: 37.5 }, { diasAtras: 5, peso: 40.0 }]) {
+      const idS = (await client.query(
+        `INSERT INTO sesion (id_usuario, fecha, duracion_min) VALUES ($1, CURRENT_DATE - ${s.diasAtras}, 45) RETURNING id_sesion`, [idU])).rows[0].id_sesion;
+      for (let serie = 1; serie <= 3; serie++) {
+        await client.query(
+          `INSERT INTO serie (id_sesion, id_ejercicio, numero_serie, peso_kg, repeticiones, rpe, descanso_seg) VALUES ($1, $2, $3, $4, 10, 7, 90)`,
+          [idS, ejJalon, serie, s.peso]);
+      }
+    }
+    console.log("Sesiones de 'Jalón al pecho' cargadas (3 sesiones en aumento).");
+  }
+
   console.log("\n========================================================");
   console.log("¡Datos de demostración cargados exitosamente!");
   console.log("Credenciales de prueba:");
