@@ -2,11 +2,13 @@ import { useState } from "react";
 import { api } from "../api.js";
 
 const OBJETIVOS = [["hipertrofia", "Aumento de masa muscular"], ["fuerza", "Fuerza"], ["perdida_grasa", "Pérdida de grasa"], ["resistencia", "Resistencia"]];
+const ANIO = new Date().getFullYear();
+const ANIOS = Array.from({ length: 77 }, (_, i) => ANIO - 14 - i); // edades de 14 a 90 años
 const nivelDe = (m) => (m === "" || m == null ? "" : m < 6 ? "principiante" : m < 12 ? "intermedio" : "experimentado");
 
 export default function Perfil({ perfil, setPerfil, salir }) {
   const [f, setF] = useState({
-    edad: perfil?.edad ?? "", sexo: perfil?.sexo ?? "", peso_corporal_kg: perfil?.peso_corporal_kg ?? "",
+    anio_nacimiento: perfil?.anio_nacimiento ?? "", sexo: perfil?.sexo ?? "", peso_corporal_kg: perfil?.peso_corporal_kg ?? "",
     objetivo: perfil?.objetivo ?? "", dias_por_semana: perfil?.dias_por_semana ?? 3, meses_practica: perfil?.meses_practica ?? "",
   });
   const [msg, setMsg] = useState(""); const [error, setError] = useState("");
@@ -22,7 +24,8 @@ export default function Perfil({ perfil, setPerfil, salir }) {
       {!perfil?.nivel && <p className="aviso">Completa tu perfil para empezar a registrar entrenamientos.</p>}
       <form onSubmit={guardar} className="form">
         <div className="fila2">
-          <label>Edad<input type="number" min="14" max="90" required value={f.edad} onChange={num("edad")} /></label>
+          <label>Año de nacimiento<select required value={f.anio_nacimiento} onChange={num("anio_nacimiento")}>
+            <option value="">Selecciona</option>{ANIOS.map((a) => <option key={a} value={a}>{a}</option>)}</select></label>
           <label>Peso corporal (kg)<input type="number" step="0.1" min="1" required value={f.peso_corporal_kg} onChange={num("peso_corporal_kg")} /></label>
         </div>
         <label>Sexo<select required value={f.sexo} onChange={(e) => setF({ ...f, sexo: e.target.value })}>

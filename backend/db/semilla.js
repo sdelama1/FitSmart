@@ -23,8 +23,8 @@ const bcrypt = require("bcryptjs");
 
   // 3. Crear perfil de entrenamiento
   await client.query(
-    `INSERT INTO perfil_entrenamiento (id_usuario, edad, sexo, peso_corporal_kg, objetivo, dias_por_semana, meses_practica, nivel)
-     VALUES ($1, 24, 'masculino', 72.5, 'hipertrofia', 4, 8, 'intermedio')`,
+    `INSERT INTO perfil_entrenamiento (id_usuario, anio_nacimiento, sexo, peso_corporal_kg, objetivo, dias_por_semana, meses_practica, nivel)
+     VALUES ($1, EXTRACT(YEAR FROM CURRENT_DATE)::int - 24, 'masculino', 72.5, 'hipertrofia', 4, 8, 'intermedio')`,
     [idU]
   );
   console.log("Perfil de entrenamiento asignado (Nivel: intermedio)");
