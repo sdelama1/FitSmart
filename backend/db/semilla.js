@@ -14,8 +14,8 @@ const bcrypt = require("bcryptjs");
   // 2. Crear usuario demo
   const hash = await bcrypt.hash("Demo1234!", 10);
   const uRes = await client.query(
-    `INSERT INTO usuario (nombre, correo, contrasena_hash, consentimiento_datos)
-     VALUES ($1, $2, $3, true) RETURNING id_usuario`,
+    `INSERT INTO usuario (nombre, correo, contrasena_hash, consentimiento_datos, anio_nacimiento)
+     VALUES ($1, $2, $3, true, EXTRACT(YEAR FROM CURRENT_DATE)::int - 24) RETURNING id_usuario`,
     ["Usuario Demo", "demo@fitsmart.pe", hash]
   );
   const idU = uRes.rows[0].id_usuario;
@@ -23,8 +23,8 @@ const bcrypt = require("bcryptjs");
 
   // 3. Crear perfil de entrenamiento
   await client.query(
-    `INSERT INTO perfil_entrenamiento (id_usuario, anio_nacimiento, sexo, peso_corporal_kg, objetivo, dias_por_semana, meses_practica, nivel)
-     VALUES ($1, EXTRACT(YEAR FROM CURRENT_DATE)::int - 24, 'masculino', 72.5, 'hipertrofia', 4, 8, 'intermedio')`,
+    `INSERT INTO perfil_entrenamiento (id_usuario, sexo, peso_corporal_kg, objetivo, dias_por_semana, meses_practica, nivel)
+     VALUES ($1, 'masculino', 72.5, 'hipertrofia', 4, 8, 'intermedio')`,
     [idU]
   );
   console.log("Perfil de entrenamiento asignado (Nivel: intermedio)");

@@ -9,7 +9,7 @@ const { Client } = require("pg");
   await client.connect();
   const { rows } = await client.query("SELECT to_regclass('public.usuario') AS t");
   // Si las tablas ya existen solo se aplican las actualizaciones, que se pueden ejecutar varias veces
-  const archivos = rows[0].t ? ["03_recomendaciones.sql", "04_ajustes_coach.sql", "05_anio_nacimiento.sql"] : ["01_esquema.sql", "02_ejercicios.sql", "03_recomendaciones.sql", "04_ajustes_coach.sql", "05_anio_nacimiento.sql"];
+  const archivos = rows[0].t ? ["03_recomendaciones.sql", "04_ajustes_coach.sql", "05_anio_nacimiento.sql", "06_anio_en_registro.sql"] : ["01_esquema.sql", "02_ejercicios.sql", "03_recomendaciones.sql", "04_ajustes_coach.sql", "05_anio_nacimiento.sql", "06_anio_en_registro.sql"];
   if (rows[0].t) console.log("Las tablas ya existen: se aplican solo las actualizaciones.");
   for (const f of archivos) {
     await client.query(fs.readFileSync(path.join(__dirname, f), "utf8"));

@@ -11,10 +11,10 @@ test("Calentamiento y alternativas", { skip: omitir }, async (t) => {
   const app = require("../src/app");
   const db = require("../src/db");
   const correo = `coach_${Date.now()}@fitsmart.pe`;
-  await request(app).post("/api/auth/registro").send({ nombre: "Coach", correo, contrasena: "clave1234", consentimiento: true });
+  await request(app).post("/api/auth/registro").send({ nombre: "Coach", correo, contrasena: "clave1234", consentimiento: true, anio_nacimiento: new Date().getFullYear() - 25 });
   const token = (await request(app).post("/api/auth/login").send({ correo, contrasena: "clave1234" })).body.token;
   const auth = { Authorization: `Bearer ${token}` };
-  await request(app).put("/api/perfil").set(auth).send({ anio_nacimiento: new Date().getFullYear() - 25, sexo: "femenino", peso_corporal_kg: 60, objetivo: "fuerza", dias_por_semana: 3, meses_practica: 2 });
+  await request(app).put("/api/perfil").set(auth).send({ sexo: "femenino", peso_corporal_kg: 60, objetivo: "fuerza", dias_por_semana: 3, meses_practica: 2 });
   const banca = (await db.query("SELECT id_ejercicio FROM ejercicio WHERE nombre = 'Press de banca'")).rows[0].id_ejercicio;
 
   await t.test("HU-23: la serie de calentamiento se guarda sin RPE y no entra en la precarga", async () => {

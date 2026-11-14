@@ -18,8 +18,14 @@ test("Flujo del Sprint 1 (HU-01 a HU-08)", { skip: omitir }, async (t) => {
     const r = await request(app).post("/api/auth/registro").send({ nombre: "Prueba", correo, contrasena: "clave1234" });
     assert.strictEqual(r.status, 400);
   });
+  await t.test("HU-01 registro sin año de nacimiento válido es rechazado", async () => {
+    const sin = await request(app).post("/api/auth/registro").send({ nombre: "Prueba", correo, contrasena: "clave1234", consentimiento: true });
+    assert.strictEqual(sin.status, 400);
+    const nino = await request(app).post("/api/auth/registro").send({ nombre: "Prueba", correo, contrasena: "clave1234", consentimiento: true, anio_nacimiento: new Date().getFullYear() - 10 });
+    assert.strictEqual(nino.status, 400);
+  });
   await t.test("HU-01 registro e inicio de sesión", async () => {
-    const r = await request(app).post("/api/auth/registro").send({ nombre: "Prueba", correo, contrasena: "clave1234", consentimiento: true });
+    const r = await request(app).post("/api/auth/registro").send({ nombre: "Prueba", correo, contrasena: "clave1234", consentimiento: true, anio_nacimiento: new Date().getFullYear() - 25 });
     assert.strictEqual(r.status, 201);
     const hash = await db.query("SELECT contrasena_hash FROM usuario WHERE correo = $1", [correo]);
     assert.match(hash.rows[0].contrasena_hash, /^\$2[aby]\$/);
@@ -30,9 +36,10 @@ test("Flujo del Sprint 1 (HU-01 a HU-08)", { skip: omitir }, async (t) => {
     token = ok.body.token;
   });
   await t.test("HU-02 y HU-03 perfil con nivel calculado", async () => {
-    const r = await request(app).put("/api/perfil").set(auth()).send({ anio_nacimiento: new Date().getFullYear() - 24, sexo: "masculino", peso_corporal_kg: 72, objetivo: "hipertrofia", dias_por_semana: 4, meses_practica: 8 });
+    const r = await request(app).put("/api/perfil").set(auth()).send({ sexo: "masculino", peso_corporal_kg: 72, objetivo: "hipertrofia", dias_por_semana: 4, meses_practica: 8 });
     assert.strictEqual(r.status, 200);
     assert.strictEqual(r.body.nivel, "intermedio");
+    assert.strictEqual(r.body.edad, 25); // calculada por el sistema desde el año de nacimiento del registro
   });
   await t.test("HU-04 catálogo filtrado por grupo y equipo", async () => {
     const r = await request(app).get("/api/ejercicios?grupo=Pecho&equipo=Barra").set(auth());
@@ -75,10 +82,10 @@ test("Flujo del Sprint 2 (HU-10 a HU-12)", { skip: omitir }, async (t) => {
   const app = require("../src/app");
   const db = require("../src/db");
   const correo = `prueba2_${Date.now()}@fitsmart.pe`;
-  const reg = await request(app).post("/api/auth/registro").send({ nombre: "Prueba", correo, contrasena: "clave1234", consentimiento: true });
+  const reg = await request(app).post("/api/auth/registro").send({ nombre: "Prueba", correo, contrasena: "clave1234", consentimiento: true, anio_nacimiento: new Date().getFullYear() - 25 });
   const auth = { Authorization: `Bearer ${reg.body.token}` };
   const idU = reg.body.usuario.id_usuario;
-  await request(app).put("/api/perfil").set(auth).send({ anio_nacimiento: new Date().getFullYear() - 30, sexo: "femenino", peso_corporal_kg: 60, objetivo: "hipertrofia", dias_por_semana: 3, meses_practica: 2 });
+  await request(app).put("/api/perfil").set(auth).send({ sexo: "femenino", peso_corporal_kg: 60, objetivo: "hipertrofia", dias_por_semana: 3, meses_practica: 2 });
   const idEj = (await db.query("SELECT id_ejercicio FROM ejercicio WHERE nombre = 'Press de banca'")).rows[0].id_ejercicio;
   // 5 sesiones anteriores de 3 series a 40 kg; repeticiones de la 3.ª serie: volumen 1200, 1200, 1160, 1200, 1120 (estancado)
   const ultimaSerie = [10, 10, 9, 10, 8];

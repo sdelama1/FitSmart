@@ -7,8 +7,8 @@ Cubre las historias HU-01 a HU-12 y, del Sprint 3, las HU-19 a HU-23.
 
 | Historia | Qué incluye | Dónde está |
 |---|---|---|
-| HU-01 | Registro con consentimiento (Ley N.º 29733), inicio de sesión con JWT, contraseña con bcrypt | `backend/src/routes/auth.js`, `Login.jsx`, `Registro.jsx` |
-| HU-02 | Perfil de entrenamiento editable; se pide el año de nacimiento y el sistema calcula la edad | `backend/src/routes/perfil.js`, `Perfil.jsx` |
+| HU-01 | Registro con año de nacimiento (el sistema calcula la edad) y consentimiento (Ley N.º 29733), inicio de sesión con JWT, contraseña con bcrypt | `backend/src/routes/auth.js`, `Login.jsx`, `Registro.jsx` |
+| HU-02 | Perfil de entrenamiento editable | `backend/src/routes/perfil.js`, `Perfil.jsx` |
 | HU-03 | Nivel según meses de práctica (< 6 principiante, 6 a 11 intermedio, 12 o más experimentado); la interfaz cambia según el nivel | `backend/src/nivel.js` |
 | HU-04 | Catálogo con filtro por grupo muscular y equipo, técnica y enlace a video | `backend/src/routes/ejercicios.js`, `Catalogo.jsx` |
 | HU-05 | Registro de series con peso, repeticiones y RPE (1 a 10) | `backend/src/routes/sesiones.js`, `Registrar.jsx` |
