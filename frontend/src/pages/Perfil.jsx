@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api } from "../api.js";
 
-const OBJETIVOS = [["hipertrofia", "Hipertrofia"], ["fuerza", "Fuerza"], ["perdida_grasa", "Pérdida de grasa"], ["resistencia", "Resistencia"]];
+const OBJETIVOS = [["hipertrofia", "Aumento de masa muscular"], ["fuerza", "Fuerza"], ["perdida_grasa", "Pérdida de grasa"], ["resistencia", "Resistencia"]];
 const nivelDe = (m) => (m === "" || m == null ? "" : m < 6 ? "principiante" : m < 12 ? "intermedio" : "experimentado");
 
 export default function Perfil({ perfil, setPerfil, salir }) {

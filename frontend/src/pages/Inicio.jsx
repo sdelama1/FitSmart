@@ -16,7 +16,7 @@ function resumirSemana(sesiones) {
 }
 const miles = (n) => n.toLocaleString("es-PE", { maximumFractionDigits: 0 });
 
-const OBJ = { hipertrofia: "hipertrofia", fuerza: "fuerza", perdida_grasa: "pérdida de grasa", resistencia: "resistencia" };
+const OBJ = { hipertrofia: "aumento de masa muscular", fuerza: "fuerza", perdida_grasa: "pérdida de grasa", resistencia: "resistencia" };
 
 export default function Inicio({ perfil, usuario }) {
   const [rutina, setRutina] = useState(undefined);
