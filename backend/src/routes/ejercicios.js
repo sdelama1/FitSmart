@@ -6,11 +6,11 @@ const { alternativas } = require("../recomendador");
 router.get("/", async (req, res, next) => {
   try {
     const { grupo, equipo, q } = req.query;
-    const cond = [], p = [];
+    const cond = ["activo"], p = [];
     if (grupo) { p.push(grupo); cond.push(`grupo_muscular = $${p.length}`); }
     if (equipo) { p.push(equipo); cond.push(`equipo = $${p.length}`); }
     if (q) { p.push(`%${q}%`); cond.push(`nombre ILIKE $${p.length}`); }
-    const where = cond.length ? "WHERE " + cond.join(" AND ") : "";
+    const where = "WHERE " + cond.join(" AND ");
     const { rows } = await db.query(`SELECT * FROM ejercicio ${where} ORDER BY grupo_muscular, nombre`, p);
     res.json(rows);
   } catch (e) { next(e); }
@@ -18,8 +18,8 @@ router.get("/", async (req, res, next) => {
 
 router.get("/filtros", async (_req, res, next) => {
   try {
-    const g = await db.query("SELECT DISTINCT grupo_muscular AS v FROM ejercicio ORDER BY 1");
-    const e = await db.query("SELECT DISTINCT equipo AS v FROM ejercicio ORDER BY 1");
+    const g = await db.query("SELECT DISTINCT grupo_muscular AS v FROM ejercicio WHERE activo ORDER BY 1");
+    const e = await db.query("SELECT DISTINCT equipo AS v FROM ejercicio WHERE activo ORDER BY 1");
     res.json({ grupos: g.rows.map((r) => r.v), equipos: e.rows.map((r) => r.v) });
   } catch (e) { next(e); }
 });
@@ -27,14 +27,14 @@ router.get("/filtros", async (_req, res, next) => {
 // HU-20: ejercicios alternativos cuando el equipo está ocupado
 router.get("/:id/alternativas", async (req, res, next) => {
   try {
-    const catalogo = (await db.query("SELECT * FROM ejercicio ORDER BY id_ejercicio")).rows;
+    const catalogo = (await db.query("SELECT * FROM ejercicio WHERE activo OR id_ejercicio = $1 ORDER BY id_ejercicio", [req.params.id])).rows;
     const ej = catalogo.find((e) => e.id_ejercicio === Number(req.params.id));
     if (!ej) return res.status(404).json({ error: "Ejercicio no encontrado" });
     const perfil = (await db.query("SELECT nivel FROM perfil_entrenamiento WHERE id_usuario = $1", [req.usuario.id])).rows[0];
     const conocidos = new Set((await db.query(
       "SELECT DISTINCT se.id_ejercicio FROM sesion s JOIN serie se ON se.id_sesion = s.id_sesion WHERE s.id_usuario = $1",
       [req.usuario.id])).rows.map((r) => r.id_ejercicio));
-    res.json(alternativas(ej, catalogo, perfil?.nivel, conocidos).map((e) => ({ ...e, conocido: conocidos.has(e.id_ejercicio) })));
+    res.json(alternativas(ej, catalogo.filter((e) => e.activo), perfil?.nivel, conocidos).map((e) => ({ ...e, conocido: conocidos.has(e.id_ejercicio) })));
   } catch (e) { next(e); }
 });
 

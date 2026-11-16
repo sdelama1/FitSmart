@@ -21,7 +21,7 @@ async function detectar(idUsuario) {
     const ej = (await db.query("SELECT * FROM ejercicio WHERE id_ejercicio = $1", [idE])).rows[0];
     // Variante: mismo grupo muscular, otro ejercicio; se prefiere otro tipo de equipo
     const v = (await db.query(
-      `SELECT nombre FROM ejercicio WHERE grupo_muscular = $1 AND id_ejercicio <> $2
+      `SELECT nombre FROM ejercicio WHERE activo AND grupo_muscular = $1 AND id_ejercicio <> $2
        ORDER BY (equipo = $3), id_ejercicio LIMIT 1`, [ej.grupo_muscular, idE, ej.equipo])).rows[0];
     const mensaje = `${ej.nombre} sin aumento de volumen en 3 sesiones seguidas.` + (v ? ` Variante propuesta: ${v.nombre}.` : "");
     await db.query("INSERT INTO alerta (id_usuario, id_ejercicio, mensaje) VALUES ($1,$2,$3)", [idUsuario, idE, mensaje]);

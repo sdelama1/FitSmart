@@ -24,11 +24,13 @@ export default function Inicio({ perfil, usuario }) {
   const [dia, setDia] = useState(1);
   const [error, setError] = useState("");
   const [semana, setSemana] = useState(null);
+  const [sus, setSus] = useState(null);
 
   useEffect(() => {
     api("/rutinas/actual").then(setRutina).catch(() => setRutina(null));
     api("/alertas").then(setAlertas).catch(() => {});
     api("/sesiones").then((ss) => setSemana(resumirSemana(ss))).catch(() => {});
+    api("/sus/estado").then(setSus).catch(() => {});
   }, []);
 
   const generar = async () => {
@@ -49,6 +51,9 @@ export default function Inicio({ perfil, usuario }) {
           <small>volumen esta semana{semana.anterior > 0 ? ` · la anterior: ${miles(semana.anterior)} kg` : ""}</small></div>
         <div className="dato solo-pc"><b>{semana.series}</b><small>{semana.series === 1 ? "serie registrada" : "series registradas"} esta semana</small></div>
       </div>}
+      {sus?.disponible && !sus.respondido && <div className="invitacion-sus">
+        <div><b>¿Nos ayudas a evaluar FitSmart?</b><p>Son 10 preguntas cortas sobre tu experiencia. Toma unos 2 minutos.</p></div>
+        <Link className="btn mini" to="/evaluacion">Responder</Link></div>}
       {alertas.map((a) => (
         <div key={a.id_alerta} className="alerta">
           <b>Alerta de estancamiento</b><p>{a.mensaje}</p>

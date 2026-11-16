@@ -1,7 +1,7 @@
 # FitSmart · Sprints 1 y 2 (entregables 1.4.1, 1.4.2 y 1.4.3)
 
 Aplicación web del módulo inteligente de seguimiento de entrenamientos FitSmart.
-Cubre las historias HU-01 a HU-12 y, del Sprint 3, las HU-19 a HU-23.
+Cubre las historias HU-01 a HU-16 y HU-19 a HU-23 (Sprints 1, 2 y 3).
 
 ## Sprint 1
 
@@ -25,7 +25,18 @@ Cubre las historias HU-01 a HU-12 y, del Sprint 3, las HU-19 a HU-23.
 | HU-11 | Alerta cuando ninguna de las 3 últimas sesiones de un ejercicio supera el volumen de la sesión previa, con un ejercicio del mismo grupo muscular como variante | `backend/src/routes/alertas.js`, `Inicio.jsx` |
 | HU-12 | Rutina según nivel (4, 5 o 6 ejercicios por día; máquinas primero para principiantes), objetivo (series y repeticiones) y días por semana (cuerpo completo, superior/inferior o empuje/tirón/pierna) | `backend/src/rutina.js`, `backend/src/routes/rutinas.js`, `Inicio.jsx` |
 
-## Sprint 3 (avance)
+## Sprint 3
+
+| Historia | Qué incluye | Dónde está |
+|---|---|---|
+| HU-13 | Pantalla Progreso: volumen semanal de las últimas 8 semanas (gráfico de barras) y carga máxima por sesión de cada ejercicio (gráfico de línea), con detalle al pasar el cursor y tabla de datos. No incluye el calentamiento | `backend/src/progreso.js`, `backend/src/routes/progreso.js`, `Progreso.jsx`, `Graficos.jsx` |
+| HU-14 | Comparación por grupo muscular del volumen de los últimos 7 días frente a los 7 anteriores, con la variación porcentual | `GET /api/progreso/comparacion`, `Progreso.jsx` |
+| HU-15 | Cuestionario SUS de 10 ítems (escala de 1 a 5) dentro del módulo. Se invita a responder desde Inicio después de 3 sesiones y también desde Perfil. El puntaje de 0 a 100 se guarda una sola vez por usuario junto con su nivel | `backend/src/routes/sus.js`, `Evaluacion.jsx` |
+| HU-16 | Panel del administrador del gimnasio: usuarios registrados y activos, sesiones por semana, puntaje SUS promedio por nivel; alta, edición, baja y reactivación de ejercicios (la baja oculta el ejercicio sin borrar el historial) | `backend/src/routes/admin.js`, `Admin.jsx` |
+
+Cuenta de administrador de demostración: `admin@fitsmart.pe` / `Admin1234!` (la crea `npm run db:seed`).
+
+### Otras historias del Sprint 3
 
 | Historia | Qué incluye | Dónde está |
 |---|---|---|
@@ -102,7 +113,7 @@ cd backend
 npm test
 ```
 
-Son 25 pruebas: 12 unitarias (nivel, regla de progresión, límites, estancamiento y rutina) y 13 de integración del flujo HU-01 a HU-12.
+Son 46 pruebas entre unitarias (nivel, progresión, límites, estancamiento, rutina, recomendaciones, progreso y puntaje SUS) y de integración con la base de datos (flujos de los Sprints 1, 2 y 3).
 Las de integración usan la base de `DATABASE_URL`; crean usuarios de prueba y los borran al final.
 
 Pruebas del servicio del modelo:
@@ -132,6 +143,12 @@ python -m pytest tests
 | POST | `/api/rutinas/generar` | Generar rutina guiada desde el perfil |
 | GET | `/api/rutinas/actual` | Rutina vigente |
 | GET | `/api/recomendaciones` | Recomendaciones personalizadas de ejercicios (máximo 3) |
+| GET | `/api/progreso/semanal` | Volumen semanal de las últimas semanas |
+| GET | `/api/progreso/comparacion` | Volumen por grupo muscular: últimos 7 días frente a los 7 anteriores |
+| GET | `/api/progreso/ejercicio/:id` | Carga máxima y volumen por sesión de un ejercicio |
+| GET / POST | `/api/sus/estado`, `/api/sus` | Estado y envío del cuestionario SUS |
+| GET | `/api/admin/indicadores` | Indicadores de uso (solo administrador) |
+| GET / POST / PUT / DELETE | `/api/admin/ejercicios` | Gestión del catálogo (solo administrador) |
 | GET | `/api/ejercicios/:id/alternativas` | Ejercicios alternativos si el equipo está ocupado |
 | PATCH | `/api/recomendaciones/:id` | Registrar si la recomendación se aceptó o se descartó |
 

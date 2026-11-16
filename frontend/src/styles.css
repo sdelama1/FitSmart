@@ -22,7 +22,7 @@ h3 { font-size: 17px; margin: 18px 0 4px; }
 .saludo { color: var(--texto2); font-size: 14px; margin: 0; }
 
 /* Navegación inferior (celular) */
-.nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; display: grid; grid-template-columns: repeat(5, 1fr); background: rgba(20, 23, 27, .96); backdrop-filter: blur(8px); border-top: 1px solid var(--linea); padding: 6px 4px 10px; z-index: 3; }
+.nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; display: grid; grid-template-columns: repeat(6, 1fr); background: rgba(20, 23, 27, .96); backdrop-filter: blur(8px); border-top: 1px solid var(--linea); padding: 6px 4px 10px; z-index: 3; }
 .nav a { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0; color: var(--texto2); text-decoration: none; font-size: 11px; font-weight: 500; }
 .nav a svg { width: 22px; height: 22px; }
 .nav a.active { color: var(--acento); font-weight: 600; }
@@ -265,3 +265,71 @@ table.series { width: 100%; border-collapse: collapse; }
 
 /* HU-21: opciones de repeticiones en reserva */
 .rpe .opciones.reserva { grid-template-columns: repeat(4, 1fr); }
+
+/* Sprint 3: gráficos (HU-13), comparación (HU-14), SUS (HU-15) y panel del administrador (HU-16) */
+.nav.nav-admin { grid-template-columns: repeat(3, 1fr); }
+.nav a { font-size: 10.5px; }
+.bloque { margin: 18px 0 8px; }
+.bloque h3, .cab-bloque h3 { font-family: var(--titulo); text-transform: uppercase; font-size: 22px; letter-spacing: .5px; margin: 0 0 2px; }
+.cab-bloque { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.cab-bloque .elegir-ejercicio { width: auto; max-width: 100%; margin: 0; }
+.grafico-caja { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 18px; padding: 12px 12px 6px; margin-top: 8px; overflow: hidden; }
+.grafico { margin: 0; }
+.grafico svg { display: block; touch-action: manipulation; overflow: visible; }
+.grafico .rejilla { stroke: var(--linea); stroke-width: 1; }
+.grafico .eje { fill: var(--texto2); font: 500 11px Inter, sans-serif; }
+.grafico .eje.activo { fill: var(--texto); }
+.grafico .barra { fill: var(--acento); opacity: .85; }
+.grafico .barra.activa { opacity: 1; }
+.grafico .linea { fill: none; stroke: var(--acento); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.grafico .punto { fill: var(--acento); stroke: var(--tarjeta); stroke-width: 2; }
+.grafico .guia { stroke: var(--texto2); stroke-dasharray: 3 3; }
+.lectura { min-height: 22px; font-size: 13px; color: var(--texto2); padding: 2px 4px 6px; }
+.lectura b { color: var(--texto); }
+.tabla-grafico { margin: 4px 4px 6px; font-size: 13px; color: var(--texto2); }
+.tabla-grafico summary { font-weight: 500; color: var(--texto2); font-size: 12px; }
+.tabla-grafico table { margin-top: 6px; }
+.comparacion { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 8px; }
+.comparacion .dato b { font-size: 26px; }
+.variacion { display: block; font-size: 12px; margin-top: 4px; font-weight: 600; }
+.variacion.sube { color: var(--acento); } .variacion.baja { color: var(--naranja); } .variacion.neutra { color: var(--texto2); font-weight: 400; }
+.invitacion-sus { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: linear-gradient(135deg, #253012, var(--tarjeta) 70%); border: 1px solid #c8f53c55; border-radius: 16px; padding: 12px 14px; margin-bottom: 14px; }
+.invitacion-sus p { margin: 4px 0 0; font-size: 13px; color: var(--texto2); }
+.invitacion-sus .btn.mini { background: var(--acento); color: var(--fondo); border: 0; flex: none; }
+.items-sus { list-style: none; padding: 0; margin: 12px 0; display: flex; flex-direction: column; gap: 10px; counter-reset: sus; }
+.items-sus li { counter-increment: sus; }
+.items-sus li p { margin: 0 0 10px; font-weight: 500; line-height: 1.45; }
+.items-sus li p::before { content: counter(sus) ". "; color: var(--acento); font-weight: 700; }
+.likert { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.likert button { padding: 10px 0; border-radius: 10px; border: 1px solid var(--linea); background: var(--tarjeta2); color: var(--texto2); font: 700 15px Inter, sans-serif; cursor: pointer; }
+.likert button.activo { background: var(--acento); border-color: var(--acento); color: var(--fondo); }
+.extremos { display: flex; justify-content: space-between; font-size: 11px; color: var(--texto2); margin-top: 6px; }
+.gracias p { color: var(--texto2); }
+.enlace.evaluar { display: block; margin: 4px 0 12px; }
+.admin-datos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dos-columnas { display: grid; gap: 12px; }
+.cap { text-transform: capitalize; }
+.acciones { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.btn.mini.peligro { color: var(--naranja); border-color: #ff8a3d66; }
+.btn.mini.nuevo { background: var(--acento); color: var(--fondo); border: 0; }
+.tarjeta.inactivo { opacity: .55; }
+.form-ejercicio h3 { margin: 0; }
+textarea { font: inherit; padding: 12px 14px; border: 1px solid var(--linea); border-radius: 12px; background: var(--tarjeta); color: var(--texto); width: 100%; resize: vertical; }
+textarea:focus { border-color: var(--acento); outline: none; }
+@media (min-width: 600px) {
+  .comparacion { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .admin-datos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .dos-columnas { grid-template-columns: 1fr 1fr; align-items: start; }
+}
+@media (min-width: 900px) {
+  .nav a { font-size: 15px; }
+  .progreso .bloque, .admin .bloque { max-width: 980px; }
+  .sus .likert { max-width: 420px; }
+  .sus .extremos { max-width: 420px; }
+}
+.variacion small { display: block; color: var(--texto2); font-weight: 400; margin-top: 2px; }
+@media (min-width: 900px) {
+  .form-ejercicio { max-width: 860px; }
+  .admin .lista { grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); }
+}
+.gracias > b:first-child { text-transform: none; font-family: var(--titulo); font-size: 24px; }
