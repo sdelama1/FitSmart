@@ -8,6 +8,9 @@ import Catalogo from "./pages/Catalogo.jsx";
 import Registrar from "./pages/Registrar.jsx";
 import Historial from "./pages/Historial.jsx";
 import Inicio from "./pages/Inicio.jsx";
+import Progreso from "./pages/Progreso.jsx";
+import Evaluacion from "./pages/Evaluacion.jsx";
+import { Indicadores, GestionEjercicios } from "./pages/Admin.jsx";
 
 // Íconos de la navegación (trazos simples para no depender de librerías externas)
 const ICONOS = {
@@ -15,6 +18,8 @@ const ICONOS = {
   catalogo: <><rect x="3" y="3" width="7" height="7" rx="2" /><rect x="14" y="3" width="7" height="7" rx="2" /><rect x="3" y="14" width="7" height="7" rx="2" /><rect x="14" y="14" width="7" height="7" rx="2" /></>,
   registrar: <><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12" /></>,
   historial: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+  progreso: <path d="M4 19V10M10 19V5M16 19v-7M22 19H2" />,
+  salir: <><path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 17l5-5-5-5M15 12H3" /></>,
   perfil: <><circle cx="12" cy="8" r="4" /><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" /></>,
 };
 const Icono = ({ n }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{ICONOS[n]}</svg>;
@@ -32,6 +37,8 @@ function Protegida({ usuario, perfil, setPerfil, salir }) {
           <Route path="/catalogo" element={<Catalogo perfil={perfil} />} />
           <Route path="/registrar" element={<Registrar perfil={perfil} />} />
           <Route path="/historial" element={<Historial />} />
+          <Route path="/progreso" element={<Progreso />} />
+          <Route path="/evaluacion" element={<Evaluacion />} />
           <Route path="/perfil" element={<Perfil perfil={perfil} setPerfil={setPerfil} salir={salir} />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
@@ -42,9 +49,33 @@ function Protegida({ usuario, perfil, setPerfil, salir }) {
         <NavLink to="/catalogo"><Icono n="catalogo" />Catálogo</NavLink>
         <NavLink to="/registrar"><Icono n="registrar" />Registrar</NavLink>
         <NavLink to="/historial"><Icono n="historial" />Historial</NavLink>
+        <NavLink to="/progreso"><Icono n="progreso" />Progreso</NavLink>
         <NavLink to="/perfil"><Icono n="perfil" />Perfil</NavLink>
         <div className="nav-usuario"><span className="avatar">{usuario.nombre?.[0]?.toUpperCase() || "U"}</span>
           <div>{usuario.nombre?.split(" ")[0]}<small>{perfil?.nivel || "Sin perfil"}</small></div></div>
+      </nav>
+    </div>
+  );
+}
+
+// HU-16: el administrador del gimnasio ve solo su panel (indicadores y catálogo)
+function PanelAdmin({ usuario, salir }) {
+  return (
+    <div className="app admin">
+      <header className="barra"><Marca clase="marca" /><span className="nivel">Administrador</span></header>
+      <main className="contenido">
+        <Routes>
+          <Route path="/admin" element={<Indicadores />} />
+          <Route path="/admin/ejercicios" element={<GestionEjercicios />} />
+          <Route path="*" element={<Navigate to="/admin" replace />} />
+        </Routes>
+      </main>
+      <nav className="nav nav-admin">
+        <Marca clase="nav-marca" />
+        <NavLink to="/admin" end><Icono n="progreso" />Indicadores</NavLink>
+        <NavLink to="/admin/ejercicios"><Icono n="catalogo" />Ejercicios</NavLink>
+        <a href="/login" onClick={(e) => { e.preventDefault(); salir(); }}><Icono n="salir" />Salir</a>
+        <div className="nav-usuario"><span className="avatar">A</span><div>{usuario.nombre?.split(" ")[0]}<small>Administrador</small></div></div>
       </nav>
     </div>
   );
@@ -58,6 +89,7 @@ export default function App() {
 
   useEffect(() => {
     if (!usuario) return;
+    if (usuario.rol === "administrador") { setCargando(false); return; }
     setCargando(true);
     api("/perfil").then(setPerfil).catch(() => setPerfil(null)).finally(() => setCargando(false));
   }, [usuario]);
@@ -71,7 +103,7 @@ export default function App() {
     <Routes>
       <Route path="/login" element={usuario ? <Navigate to="/" replace /> : <Login entrar={entrar} />} />
       <Route path="/registro" element={usuario ? <Navigate to="/" replace /> : <Registro entrar={entrar} />} />
-      <Route path="/*" element={<Protegida usuario={usuario} perfil={perfil} setPerfil={setPerfil} salir={salir} />} />
+      <Route path="/*" element={usuario?.rol === "administrador" ? <PanelAdmin usuario={usuario} salir={salir} /> : <Protegida usuario={usuario} perfil={perfil} setPerfil={setPerfil} salir={salir} />} />
     </Routes>
   );
 }

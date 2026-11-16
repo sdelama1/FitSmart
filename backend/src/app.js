@@ -15,6 +15,9 @@ app.use("/api/sugerencias", requiereAuth, require("./routes/sugerencias"));
 app.use("/api/alertas", requiereAuth, require("./routes/alertas"));
 app.use("/api/recomendaciones", requiereAuth, require("./routes/recomendaciones"));
 app.use("/api/rutinas", requiereAuth, require("./routes/rutinas").router);
+app.use("/api/progreso", requiereAuth, require("./routes/progreso"));
+app.use("/api/sus", requiereAuth, require("./routes/sus"));
+app.use("/api/admin", requiereAuth, require("./routes/admin"));
 
 app.use((err, _req, res, _next) => {
   console.error(err);

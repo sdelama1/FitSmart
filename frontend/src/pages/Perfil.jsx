@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../api.js";
 
 const OBJETIVOS = [["hipertrofia", "Aumento de masa muscular"], ["fuerza", "Fuerza"], ["perdida_grasa", "Pérdida de grasa"], ["resistencia", "Resistencia"]];
@@ -40,6 +41,7 @@ export default function Perfil({ perfil, setPerfil, salir }) {
         {error && <p className="error">{error}</p>}{msg && <p className="ok">{msg}</p>}
         <button className="btn">Guardar perfil</button>
       </form>
+      {perfil?.nivel && <Link className="enlace evaluar" to="/evaluacion">Evaluar FitSmart (cuestionario de usabilidad) ›</Link>}
       <button className="btn sec" onClick={salir}>Cerrar sesión</button>
     </section>
   );

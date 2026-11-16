@@ -27,7 +27,7 @@ router.post("/generar", async (req, res, next) => {
   try {
     const p = (await cliente.query("SELECT * FROM perfil_entrenamiento WHERE id_usuario = $1", [req.usuario.id])).rows[0];
     if (!p) return res.status(400).json({ error: "Completa tu perfil antes de generar la rutina" });
-    const ejercicios = (await cliente.query("SELECT * FROM ejercicio")).rows;
+    const ejercicios = (await cliente.query("SELECT * FROM ejercicio WHERE activo")).rows;
     const rut = generarRutina(p, ejercicios);
     await cliente.query("BEGIN");
     const { rows } = await cliente.query(

@@ -106,11 +106,18 @@ const bcrypt = require("bcryptjs");
     console.log("Sesiones de 'Jalón al pecho' cargadas (3 sesiones en aumento).");
   }
 
+  // 8. Cuenta del administrador del gimnasio (HU-16). Si ya existe, se conserva
+  const hashAdmin = await bcrypt.hash("Admin1234!", 10);
+  await client.query(
+    `INSERT INTO usuario (nombre, correo, contrasena_hash, consentimiento_datos, rol)
+     VALUES ('Administrador FitSmart', 'admin@fitsmart.pe', $1, true, 'administrador') ON CONFLICT (correo) DO NOTHING`, [hashAdmin]);
+
   console.log("\n========================================================");
   console.log("¡Datos de demostración cargados exitosamente!");
   console.log("Credenciales de prueba:");
   console.log("  Correo:      demo@fitsmart.pe");
   console.log("  Contraseña:  Demo1234!");
+  console.log("Administrador: admin@fitsmart.pe / Admin1234!");
   console.log("========================================================\n");
 
   await client.end();

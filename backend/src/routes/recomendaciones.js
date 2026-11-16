@@ -10,7 +10,7 @@ router.get("/", async (req, res, next) => {
     const id = req.usuario.id;
     const perfil = (await db.query("SELECT nivel FROM perfil_entrenamiento WHERE id_usuario = $1", [id])).rows[0];
     if (!perfil) return res.json([]);
-    const catalogo = (await db.query("SELECT * FROM ejercicio ORDER BY id_ejercicio")).rows;
+    const catalogo = (await db.query("SELECT * FROM ejercicio WHERE activo ORDER BY id_ejercicio")).rows;
     const historial = (await db.query(
       `SELECT se.id_ejercicio, to_char(s.fecha, 'YYYY-MM-DD') AS fecha, MAX(se.peso_kg)::float AS peso_max,
               SUM(se.peso_kg * se.repeticiones)::float AS volumen
